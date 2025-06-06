@@ -32,12 +32,11 @@ pipeline {
             }
         }
         // Étape 3 : Création de l'image Docker 
-        // si vous travaillez sur windows , utliser bat et sur linux utiliser sh
         stage("Build Docker Image") {
             steps {
                 script { 
                     // Créer l'image Docker
-                    bat "docker build -t $DOCKER_IMAGE ."
+                    sh "docker build -t $DOCKER_IMAGE ."
                 }
             }
         }
@@ -45,7 +44,7 @@ pipeline {
         stage("Push image to Docker Hub") {
             steps {
                 script {
-                    bat """ 
+                    sh """ 
                     # Connexion à Docker Hub
                     docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}
                     echo 'Docker login successful'
@@ -60,7 +59,7 @@ pipeline {
             steps {
                 script {
                     // Lancer le conteneur
-                    bat """
+                    sh """
                     docker run -d --name $DOCKER_CONTAINER -p 8080:80 $DOCKER_IMAGE
                     """
                 }
